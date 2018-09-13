@@ -8,6 +8,7 @@ function contieneLaBusqueda(elemento, busqueda){
             }) );
 }
 
+
 Vue.component('Lista', {
     props: ['elementos', 'busqueda'],
     template: `
