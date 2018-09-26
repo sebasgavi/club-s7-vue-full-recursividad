@@ -36,28 +36,72 @@ Vue.component('Elemento', {
             return `${a}<span style="background:yellow">${b}</span>${c}`;
         }
     },
+    methods: {
+        elementClicked: function(event){
+            console.log(this.info)
+            app.seleccionado = this.info;
+        }
+    },
     template: `
     <li v-if="visible">
-        <a href="#" v-html="highlight"></a>
+        <a href="#" v-html="highlight" v-on:click="elementClicked"></a>
         <Lista v-bind:elementos="info.children" :busqueda="busqueda"></Lista>
     </li>
     `
 });
+
+
+var { LMap, LTileLayer, LMarker } = Vue2Leaflet;
+Vue.component('Map', {
+    props: ['info'],
+    components: { LMap, LTileLayer, LMarker },
+    computed: {
+        zoom: function() { return this.info.zoom; },
+        center: function() { return L.latLng(this.info.location[0], this.info.location[1]); },
+        marker: function() { return L.latLng(this.info.location[0], this.info.location[1]); },
+    },
+    data: function(){
+        return {
+            url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        }
+    },
+    template: `
+    <l-map :zoom="zoom" :center="center">
+      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+      <l-marker :lat-lng="marker"></l-marker>
+    </l-map>
+    `
+})
 
 var app = new Vue({
     el: '#app',
     data: {
         busqueda: '',
         paises: lista,
+        seleccionado: null,
+
+        stylesMain: {
+            display: 'flex'
+        },
+        stylesMap: {
+            background: 'red',
+            flex: '1 1 auto'
+        }
     },
     template: `
-    <div>
-        <h1>Buscador de lugares</h1>
+    <div :style="stylesMain">
+        <section>
+            <h1>Buscador de lugares</h1>
 
-        <input v-model="busqueda">
-        <p>{{ busqueda }}</p>
-        
-        <Lista v-bind:elementos="paises" :busqueda="busqueda"></Lista>
+            <input v-model="busqueda">
+            <p>{{ busqueda }}</p>
+            
+            <Lista v-bind:elementos="paises" :busqueda="busqueda"></Lista>
+        </section>
+        <section :style="stylesMap">
+            <Map v-if="seleccionado" :info="seleccionado"></Map>
+        </section>
     </div>
     `
 });

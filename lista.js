@@ -2,7 +2,7 @@ var lista = [
   {
     name: 'Argentina',
     location: [-34.996496, -64.967282],
-    zoom: 11,
+    zoom: 3,
     children: [
       {
         name: 'Ciudad de Buenos Aires',
@@ -43,7 +43,7 @@ var lista = [
   {
     name: 'Brasil',
     location: [-14.235004, -51.925282],
-    zoom: 11,
+    zoom: 3,
     children: [
       {
         name: 'Paraná',
@@ -79,7 +79,7 @@ var lista = [
   {
     name: 'Colombia',
     location: [2.889443, -73.783892],
-    zoom: 11,
+    zoom: 3,
     children: [
       {
         name: 'Antioquia',
